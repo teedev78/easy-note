@@ -3,7 +3,7 @@
         {
             "id": 1,
             "userId": 1,
-            "userName": "Test man 1",
+            "author": "Test man 1",
             "title": "1 first test",
             "note": "test text 0001",
             "createdAt": "2024-07-10T09:33:21.026+00:00",
@@ -12,7 +12,7 @@
         {
             "id": 2,
             "userId": 1,
-            "userName": "Test man 1",
+            "author": "Test man 1",
             "title": "2 second test",
             "note": "test text 0001",
             "createdAt": "2024-07-10T10:01:21.026+00:00",
@@ -21,7 +21,7 @@
         {
             "id": 3,
             "userId": 2,
-            "userName": "Test man 2",
+            "author": "Test man 2",
             "title": "3 first test man 2",
             "note": "test text 0001",
             "createdAt": "2024-07-10T09:05:14.026+00:00",

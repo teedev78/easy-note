@@ -1,8 +1,7 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import noteData from "../../../data/notes.json";
-import { useRouter } from "next/navigation";
 import axios from "axios";
+import { useRouter, useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 type Note = {
   _id: number;
@@ -17,17 +16,27 @@ type Note = {
   updatedAt: string;
 };
 
-function Note({ params }: { params: { id: string } }) {
-  const { id } = params;
+function NoteHistoryRead({ params }: { params: { id: string } }) {
   const router = useRouter();
-
   const [session, setSession] = useState(null);
   const [note, setNote] = useState<Note>();
+  const { id } = params;
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setSession(null);
+  };
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user")!);
+    setSession(user);
+  }, []);
 
   const fetchNote = async () => {
     const token = await JSON.parse(localStorage.getItem("token")!);
     axios
-      .get(`${process.env.NEXT_PUBLIC_NOTE_EASY_API}/note/${id}`, {
+      .get(`${process.env.NEXT_PUBLIC_NOTE_EASY_API}/note/history/read/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -44,20 +53,9 @@ function Note({ params }: { params: { id: string } }) {
     fetchNote();
   }, []);
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setSession(null);
-  };
-
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user")!);
-    setSession(user);
-  }, []);
-
   return (
     <>
-      <main className="bg-slate-600 text-white w-full h-[50px]">
+      <header className="bg-slate-600 text-white w-full h-[50px]">
         <div className="w-[1024px] h-full m-auto p-1 flex flex-row justify-between items-center">
           <div
             onClick={() => router.push("/")}
@@ -88,7 +86,7 @@ function Note({ params }: { params: { id: string } }) {
             </div>
           )}
         </div>
-      </main>
+      </header>
       <main className="bg-slate-500 w-[1024px] m-auto min-h-[calc(100vh-50px)]">
         {note ? (
           <div className="w-[714px] h-full m-auto pt-4 flex flex-col justify-center items-start">
@@ -113,7 +111,7 @@ function Note({ params }: { params: { id: string } }) {
               </div>
             </div>
             <div className="bg-[#d6d6d6] w-full min-h-[calc(100vh-200px)] mt-2 p-4">
-              <p className="whitespace-pre-line">{note.content}</p>
+              <p className="">{note.content}</p>
             </div>
           </div>
         ) : (
@@ -124,4 +122,4 @@ function Note({ params }: { params: { id: string } }) {
   );
 }
 
-export default Note;
+export default NoteHistoryRead;

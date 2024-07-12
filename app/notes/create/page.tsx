@@ -1,53 +1,28 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 type User = {
   email: string;
   name: string;
 };
 
-type Note = {
-  _id: number;
-  userId: number;
-  title: string;
-  author: string;
-  content: string;
-  category: string;
-  tag: string[];
-  createdAt: string;
-  updatedAt: string;
-};
-
-function EditNote({ params }: { params: { id: string } }) {
-  const { id } = params;
+const CreateNote = () => {
   const router = useRouter();
-  const [token, setToken] = useState<string | null>(null);
   const [session, setSession] = useState<User | null>(null);
-  const [note, setNote] = useState<Note>();
-  const [noteTitle, setNoteTitle] = useState<string>();
-  const [noteContent, setNoteContent] = useState<string>();
+  const [noteTitle, setNoteTitle] = useState<string>("");
+  const [noteContent, setNoteContent] = useState<string>("");
+  const [token, setToken] = useState<string>("");
   const [newCategoryInput, setNewCategoryInput] = useState<boolean>(false);
   const [categories, setCategories] = useState<string[]>([]);
   const [categoryInput, setCategoryInput] = useState<string>("");
   const [categoryOption, setCategoryOption] = useState<string>("");
 
-  const fetchNote = async () => {
-    axios
-      .get(`${process.env.NEXT_PUBLIC_NOTE_EASY_API}/note/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        setNote(res.data.note);
-        setNoteTitle(res.data.note.title);
-        setNoteContent(res.data.note.content);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setSession(null);
   };
 
   const fetchCategory = () => {
@@ -69,22 +44,14 @@ function EditNote({ params }: { params: { id: string } }) {
   };
 
   useEffect(() => {
-    fetchNote();
+    const token = JSON.parse(localStorage.getItem("token")!);
+    const user = JSON.parse(localStorage.getItem("user")!);
+    setToken(token);
+    setSession(user);
     fetchCategory();
   }, []);
 
-  useEffect(() => {
-    const token = JSON.parse(localStorage.getItem("token")!);
-    const user = JSON.parse(localStorage.getItem("user")!);
-    setSession(user);
-    setToken(token);
-  }, []);
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setSession(null);
-  };
+  useEffect(() => {}, []);
 
   const handlerNoteTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNoteTitle(e.target.value);
@@ -95,12 +62,11 @@ function EditNote({ params }: { params: { id: string } }) {
   };
 
   const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
-    const token = JSON.parse(localStorage.getItem("token")!);
     e.preventDefault();
 
     axios
-      .put(
-        `${process.env.NEXT_PUBLIC_NOTE_EASY_API}/note/${id}`,
+      .post(
+        `${process.env.NEXT_PUBLIC_NOTE_EASY_API}/note/create`,
         {
           title: noteTitle,
           content: noteContent,
@@ -157,7 +123,7 @@ function EditNote({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <main className="bg-slate-600 text-white w-full h-[50px]">
+      <header className="bg-slate-600 text-white w-full h-[50px]">
         <div className="w-[1024px] h-full m-auto p-1 flex flex-row justify-between items-center">
           <div
             onClick={() => router.push("/")}
@@ -188,10 +154,13 @@ function EditNote({ params }: { params: { id: string } }) {
             </div>
           )}
         </div>
-      </main>
-      <main className="bg-slate-500 w-[1024px] m-auto min-h-[calc(100vh-50px)]">
-        {note ? (
+      </header>
+      <main className="bg-slate-500 w-[1024px] h-[calc(100vh-50px)] m-auto p-4">
+        <div className="flex flex-col justify-center items-center w-full">
           <div className="w-[714px] h-full m-auto pt-4 flex flex-col justify-center items-start">
+            <h1 className="text-white text-3xl font-medium text-center w-full mb-5">
+              Create Note
+            </h1>
             <form onSubmit={handleSave} className="w-full">
               <div className="w-full py-2 border-b-2 border-gray-600 flex flex-row">
                 <div className="font-medium text-3xl text-white mr-2">
@@ -200,13 +169,11 @@ function EditNote({ params }: { params: { id: string } }) {
                 <input
                   type="text"
                   id="title"
+                  placeholder="Title"
                   value={noteTitle}
                   onChange={handlerNoteTitle}
                   className="w-full p-1 rounded-md"
                 />
-              </div>
-              <div className="w-full p-2 text-white border-b-2 border-gray-600 flex flex-row justify-between items-center">
-                <p className="text-sm">Created by: {note.author}</p>
               </div>
               <div>
                 <select onChange={handleCategory} className="w-[250px] mt-1">
@@ -246,7 +213,7 @@ function EditNote({ params }: { params: { id: string } }) {
               <div className="bg-[#d6d6d6] w-full h-[550px] mt-2 p-4 flex items-center">
                 <textarea
                   id="content"
-                  value={noteContent}
+                  placeholder="Note..."
                   onChange={handlerNoteContent}
                   className="w-full h-[500px] p-2 rounded-sm"
                 />
@@ -261,12 +228,10 @@ function EditNote({ params }: { params: { id: string } }) {
               </div>
             </form>
           </div>
-        ) : (
-          <div>Loading...</div>
-        )}
+        </div>
       </main>
     </>
   );
-}
+};
 
-export default EditNote;
+export default CreateNote;
