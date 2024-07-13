@@ -144,7 +144,7 @@ function NoteHistory({ params }: { params: { id: string } }) {
           )}
         </div>
       </header>
-      <main className="bg-slate-500 text-white w-[1024px] h-[100vh] m-auto p-4">
+      <main className="bg-slate-500 text-white w-[1024px] m-auto p-4">
         <div className="flex flex-col justify-center items-center w-full">
           <div className="w-full text-right">
             <button

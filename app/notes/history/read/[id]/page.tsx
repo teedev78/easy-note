@@ -93,25 +93,19 @@ function NoteHistoryRead({ params }: { params: { id: string } }) {
             <h1 className="w-full text-3xl font-medium text-white p-2 border-b-2 border-gray-600">
               Title: {note.title}
             </h1>
-            <div className="w-full p-2 text-white border-b-2 border-gray-600 flex flex-row justify-between items-center">
+            <div className="w-full py-2 text-white border-b-2 border-gray-600 flex flex-row justify-between items-center">
               <p className="text-sm">Created by {note.author}</p>
               <div>
                 <button
                   onClick={() => router.push(`/notes/history/${note.slug}`)}
-                  className="bg-blue-500 border-2 border-blue-600 text-white rounded-md py-1 px-2 mr-2"
+                  className="bg-blue-500 border-2 border-blue-600 text-white rounded-md py-1 px-2"
                 >
                   History
                 </button>
-                <button
-                  onClick={() => router.push(`/notes/${note.slug}/edit`)}
-                  className="bg-green-500 border-2 border-green-600 text-white rounded-md py-1 px-2"
-                >
-                  Edit
-                </button>
               </div>
             </div>
-            <div className="bg-[#d6d6d6] w-full min-h-[calc(100vh-200px)] mt-2 p-4">
-              <p className="">{note.content}</p>
+            <div className="bg-[#d6d6d6] w-full h-[550px] mt-2 p-4 flex items-center">
+              <p className="whitespace-pre-line border-2 border-white w-full h-[500px] bg-white">{note.content}</p>
             </div>
           </div>
         ) : (

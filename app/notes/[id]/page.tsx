@@ -112,8 +112,8 @@ function Note({ params }: { params: { id: string } }) {
                 </button>
               </div>
             </div>
-            <div className="bg-[#d6d6d6] w-full min-h-[calc(100vh-200px)] mt-2 p-4">
-              <p className="whitespace-pre-line">{note.content}</p>
+            <div className="bg-[#d6d6d6] w-full h-[550px] mt-2 p-4 flex items-center">
+              <p className="whitespace-pre-line border-2 border-white w-full h-[500px] bg-white">{note.content}</p>
             </div>
           </div>
         ) : (

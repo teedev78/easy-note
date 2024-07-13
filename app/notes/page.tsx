@@ -127,7 +127,7 @@ function Notes() {
 
   return (
     <>
-      <main className="bg-slate-600 text-white w-full h-[50px]">
+      <header className="bg-slate-600 text-white w-full h-[50px]">
         <div className="w-[1024px] h-full m-auto p-1 flex flex-row justify-between items-center">
           <div
             onClick={() => router.push("/")}
@@ -158,8 +158,8 @@ function Notes() {
             </div>
           )}
         </div>
-      </main>
-      <main className="bg-slate-500 text-white w-[1024px] h-[100vh] m-auto p-4">
+      </header>
+      <main className="bg-slate-500 text-white w-[1024px] m-auto p-4">
         <div className="flex flex-col justify-center items-center w-full">
           <div className="w-full text-right">
             <button
